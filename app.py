@@ -52,3 +52,9 @@ def chat(request: ChatRequest):
         "recommendations": recommendations,
         "end_of_conversation": True
     }
+
+@app.get("/")
+def root():
+    return {
+        "message": "SHL Assessment Recommender API is running"
+    }
