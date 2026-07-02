@@ -163,11 +163,13 @@ def retrieve_assessments(query: str, k: int = 10) -> list:
 
         url = item.get("link", "")
         test_type = normalize_test_type(item.get("keys", []))
+        description = item.get("description", "")[:200]
 
         recommendations.append({
             "name": name,
             "url": url,
             "test_type": test_type,
+            "description": description,
         })
 
         if len(recommendations) >= k:
