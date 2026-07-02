@@ -7,7 +7,13 @@ from groq import Groq
 from services.recommender import retrieve_assessments
 
 app = FastAPI(title="SHL Assessment Recommender", version="1.0")
-client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+client = None
+
+def get_client():
+    global client
+    if client is None:
+        client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+    return client
 
 SYSTEM_PROMPT = (
     "You are an SHL assessment recommender helping hiring managers find SHL Individual Test Solutions. "
@@ -58,7 +64,7 @@ def chat(request: ChatRequest):
     for m in messages:
         llm_messages.append({"role": m.role, "content": m.content})
     try:
-        response = client.chat.completions.create(
+        response = get_client().chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=llm_messages,
             temperature=0.1,
